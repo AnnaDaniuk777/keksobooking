@@ -1,4 +1,3 @@
-import { initBookingInfo } from './generate-array.js';
+import { renderCardToMap } from './render-map.js';
 
-const advertisments = Array.from({ length: 10 }, initBookingInfo);
-console.log(advertisments);
+renderCardToMap();
