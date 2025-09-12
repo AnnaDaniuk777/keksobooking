@@ -1,3 +1,3 @@
-import { renderCardToMap } from './render-map.js';
+import { renderMultipleCardsToMap } from './map-render.js';
 
-renderCardToMap();
+renderMultipleCardsToMap();
