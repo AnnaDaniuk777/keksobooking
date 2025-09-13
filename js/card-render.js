@@ -12,7 +12,7 @@ export function renderCard(bookingInfo) {
       <h3 class="popup__title">${offer.title}</h3>
       <p class="popup__text popup__text--address">${offer.address}</p>
       <p class="popup__text popup__text--price">${offer.price} <span>₽/ночь</span></p>
-      <h4 class="popup__type">${getTypeTitle(offer.type)}</h4>
+      <h4 class="popup__type">${switchTypeTitle(offer.type)}</h4>
       <p class="popup__text popup__text--capacity">${offer.rooms} ${getRoomWord(offer.rooms)} для ${offer.guests} ${getGuestWord(offer.guests)}</p>
       <p class="popup__text popup__text--time">Заезд после ${offer.checkin}, выезд до ${offer.checkout}</p>
       <ul class="popup__features">
@@ -48,7 +48,7 @@ function generatePhotos(photos) {
   ).join('');
 }
 
-function getTypeTitle(type) {
+function switchTypeTitle(type) {
   switch (type) {
     case 'flat':
       return 'Кварира';
