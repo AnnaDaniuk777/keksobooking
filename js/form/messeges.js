@@ -12,7 +12,7 @@ export const showMessage = (templateId) => {
   };
 
   const onDocumentClick = (evt) => {
-    if (!messageElement.contains(evt.target)) {
+    if (messageElement.contains(evt.target)) {
       closeMessage();
     }
   };
