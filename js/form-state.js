@@ -17,6 +17,6 @@ export function togglePageState(isActive) {
   });
 
   if (slider) {
-    slider.style.disabled = !isActive ? true : false;
+    slider.style.disabled = !isActive;
   }
 }

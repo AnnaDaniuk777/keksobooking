@@ -1,17 +1,6 @@
 import { initBookingInfo } from './generate-array.js';
 import { renderCard } from './card-render.js';
 
-// export function renderCardToMap() {
-//   const bookingInfo = initBookingInfo();
-//   const cardTemplate = renderCard(bookingInfo);
-//   const mapContainer = document.querySelector('.map__canvas');
-//   const cardClone = cardTemplate.content.cloneNode(true);
-
-//   mapContainer.appendChild(cardClone);
-
-//   initCardElements(cardClone, bookingInfo.offer);
-// }
-
 function hideEmptyElement(element, value) {
   if (!value || value.toString().trim() === '' || value === 0) {
     element.style.display = 'none';
@@ -42,7 +31,7 @@ function initCardElements(cardElement, offer) {
   hideEmptyElement(titleElement, offer.title);
 }
 
-export function renderMultipleCardsToMap(count = 10) {
+export function renderMultipleCardsToMap(count) {
   const mapContainer = document.querySelector('.map__canvas');
 
   mapContainer.innerHTML = '';
