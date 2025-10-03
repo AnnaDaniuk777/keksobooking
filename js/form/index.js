@@ -1,7 +1,7 @@
 import { initValidation } from './validation.js';
 import { createSlider } from './slider.js';
 import { initImageHandlers } from './images.js';
-import { showMessage } from './messeges.js';
+import { showMessage } from './messages.js';
 
 const form = document.querySelector('.ad-form');
 const priceInput = form.querySelector('#price');

@@ -36,3 +36,14 @@ export const PHOTOS = ['https://assets.htmlacademy.ru/content/intensive/javascri
 ];
 
 export const COUNT = 10;
+
+export const DEFAULT_COORDS = {
+  lat: 35.6895,
+  lng: 139.6917,
+};
+
+export const MAP_ZOOM = 12;
+
+export const TILE_LAYER_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+export const TILE_LAYER_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';

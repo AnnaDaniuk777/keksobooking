@@ -1,13 +1,15 @@
-import { renderMultipleCardsToMap } from './map-render.js';
-import { togglePageState } from './form-state.js';
-import { COUNT } from './data.js';
 import { initForm } from './form/index.js';
+import { mapModule } from './map/map.js';
+import { initResetHandler } from './form/reset-form.js';
 
-const DEFAULT__COORDS = {
-  lat: 35.6895,
-  lng: 139.6917,
+const initApp = () => {
+  mapModule.initMap();
+
+  setTimeout(() => {
+    const coords = mapModule.getCurrentCoords();
+    initForm(coords);
+    initResetHandler();
+  }, 100);
 };
 
-initForm(DEFAULT__COORDS);
-renderMultipleCardsToMap(COUNT);
-togglePageState(true);
+document.addEventListener('DOMContentLoaded', initApp);
