@@ -1,15 +1,36 @@
 import { initForm } from './form/index.js';
 import { mapModule } from './map/map.js';
 import { initResetHandler } from './form/reset-form.js';
+import { loadData } from './api.js';
+import { setAdvertisements, renderAdvertisements } from './advertisements.js';
+import { initFilters, disableFilters, resetFilters } from './filters.js';
 
-const initApp = () => {
-  mapModule.initMap();
+const initApp = async () => {
+  try {
+    await mapModule.initMap();
+    disableFilters();
 
-  setTimeout(() => {
+    const advertisements = await loadData();
+    setAdvertisements(advertisements);
+    renderAdvertisements(advertisements);
+
+    initFilters();
     const coords = mapModule.getCurrentCoords();
     initForm(coords);
     initResetHandler();
-  }, 100);
+
+    const adForm = document.querySelector('.ad-form');
+    if (adForm) {
+      adForm.addEventListener('reset', () => {
+        setTimeout(() => {
+          resetFilters();
+        }, 0);
+      });
+    }
+
+  } catch (error) {
+    throw new Error(`Ошибка инициализации приложения: ${error.message}`);
+  }
 };
 
 document.addEventListener('DOMContentLoaded', initApp);

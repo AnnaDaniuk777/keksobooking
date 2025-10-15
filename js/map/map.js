@@ -1,5 +1,4 @@
-import { DEFAULT_COORDS } from './data.js';
-import { MAP_ZOOM, TILE_LAYER_URL, TILE_LAYER_ATTRIBUTION } from '../data.js';
+import { DEFAULT_COORDS, MAP_ZOOM } from '../data.js';
 
 export const mapModule = (() => {
   let map;
@@ -7,59 +6,64 @@ export const mapModule = (() => {
   let addressField;
   let isMapLoaded = false;
 
-  const initMap = () => {
+  const initMap = () => new Promise((resolve, reject) => {
     addressField = document.getElementById('address');
 
-    map = L.map('map-canvas');
+    if (typeof ymaps === 'undefined') {
+      reject(new Error('Yandex Maps API not loaded'));
+      return;
+    }
 
-    map.on('load', () => {
-      isMapLoaded = true;
-      togglePageState(true);
-    });
+    ymaps.ready(() => {
+      try {
+        map = new ymaps.Map('map-canvas', {
+          center: [DEFAULT_COORDS.lat, DEFAULT_COORDS.lng],
+          zoom: MAP_ZOOM,
+          controls: ['zoomControl']
+        });
 
-    map.setView([DEFAULT_COORDS.lat, DEFAULT_COORDS.lng], MAP_ZOOM);
+        marker = new ymaps.Placemark(
+          [DEFAULT_COORDS.lat, DEFAULT_COORDS.lng],
+          {},
+          {
+            draggable: true,
+            preset: 'islands#icon',
+            iconColor: '#ff5635'
+          }
+        );
 
-    L.tileLayer(TILE_LAYER_URL, {
-      attribution: TILE_LAYER_ATTRIBUTION
-    }).addTo(map);
+        map.geoObjects.add(marker);
+        updateAddressField(DEFAULT_COORDS.lat, DEFAULT_COORDS.lng);
 
-    const defaultIcon = L.icon({
-      iconUrl: 'vendor/leaflet/images/marker-icon.png',
-      shadowUrl: 'vendor/leaflet/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
+        marker.events.add('dragend', () => {
+          const coords = marker.geometry.getCoordinates();
+          updateAddressField(coords[0], coords[1]);
+        });
 
-    marker = L.marker([DEFAULT_COORDS.lat, DEFAULT_COORDS.lng], {
-      draggable: true,
-      icon: defaultIcon
-    }).addTo(map);
+        map.events.add('click', (e) => {
+          if (isPageActive()) {
+            const coords = e.get('coords');
+            marker.geometry.setCoordinates(coords);
+            updateAddressField(coords[0], coords[1]);
+          }
+        });
 
-    updateAddressField(DEFAULT_COORDS.lat, DEFAULT_COORDS.lng);
+        isMapLoaded = true;
+        togglePageState(true);
+        resolve(map);
 
-    marker.on('dragend', () => {
-      const position = marker.getLatLng();
-      updateAddressField(position.lat, position.lng);
-    });
-
-    map.on('click', (evt) => {
-      if (isPageActive()) {
-        marker.setLatLng(evt.latlng);
-        updateAddressField(evt.latlng.lat, evt.latlng.lng);
+      } catch (error) {
+        reject(error);
       }
     });
-
-    togglePageState(false);
-
-    return map;
-  };
+  });
 
   function updateAddressField(lat, lng) {
     const formattedLat = lat.toFixed(5);
     const formattedLng = lng.toFixed(5);
-    addressField.value = `${formattedLat}, ${formattedLng}`;
+    if (addressField) {
+      addressField.value = `${formattedLat}, ${formattedLng}`;
+    }
   }
 
   const getCurrentCoords = () => {
@@ -67,18 +71,17 @@ export const mapModule = (() => {
       return DEFAULT_COORDS;
     }
 
-    const position = marker.getLatLng();
-
+    const coords = marker.geometry.getCoordinates();
     return {
-      lat: parseFloat(position.lat.toFixed(5)),
-      lng: parseFloat(position.lng.toFixed(5))
+      lat: parseFloat(coords[0].toFixed(5)),
+      lng: parseFloat(coords[1].toFixed(5))
     };
   };
 
   const setCoords = (lat, lng) => {
     if (marker) {
-      marker.setLatLng([lat, lng]);
-      map.setView([lat, lng], map.getZoom());
+      marker.geometry.setCoordinates([lat, lng]);
+      map.setCenter([lat, lng], map.getZoom());
       updateAddressField(lat, lng);
     }
   };
@@ -107,36 +110,28 @@ export const mapModule = (() => {
     });
 
     if (slider) {
-      if (isActive) {
-        slider.style.opacity = '1';
-        slider.style.pointerEvents = 'auto';
-      } else {
-        slider.style.opacity = '0.5';
-        slider.style.pointerEvents = 'none';
-      }
+      slider.style.opacity = isActive ? '1' : '0.5';
+      slider.style.pointerEvents = isActive ? 'auto' : 'none';
     }
 
     if (marker) {
-      if (isActive) {
-        marker.dragging.enable();
-      } else {
-        marker.dragging.disable();
-      }
+      marker.options.set('draggable', isActive);
     }
   }
 
   function isPageActive() {
     const adForm = document.querySelector('.ad-form');
-
-    return !adForm.classList.contains('ad-form--disabled');
+    return adForm && !adForm.classList.contains('ad-form--disabled');
   }
 
   const getMapLoadStatus = () => isMapLoaded;
 
+  const getMap = () => map;
+
   const resetMap = () => {
     if (marker) {
-      marker.setLatLng([DEFAULT_COORDS.lat, DEFAULT_COORDS.lng]);
-      map.setView([DEFAULT_COORDS.lat, DEFAULT_COORDS.lng], 12);
+      marker.geometry.setCoordinates([DEFAULT_COORDS.lat, DEFAULT_COORDS.lng]);
+      map.setCenter([DEFAULT_COORDS.lat, DEFAULT_COORDS.lng], MAP_ZOOM);
       updateAddressField(DEFAULT_COORDS.lat, DEFAULT_COORDS.lng);
     }
   };
@@ -147,6 +142,7 @@ export const mapModule = (() => {
     setCoords,
     togglePageState,
     getMapLoadStatus,
+    getMap,
     resetMap
   };
 })();
