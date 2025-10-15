@@ -19,7 +19,7 @@ const onAvatarChange = (evt) => {
   const file = evt.target.files[0];
 
   if (!validateImageFile(file)) {
-    alert('Пожалуйста, выберите файл изображения (JPEG, PNG, GIF, WebP)');
+    // alert('Пожалуйста, выберите файл изображения (JPEG, PNG, GIF, WebP)');
     evt.target.value = '';
 
     return;
@@ -41,7 +41,7 @@ const onImagesChange = (evt) => {
 
   const invalidFiles = files.filter((file) => !validateImageFile(file));
   if (invalidFiles.length > 0) {
-    alert('Некоторые файлы не являются изображениями. Пожалуйста, выберите только файлы изображений (JPEG, PNG, GIF, WebP)');
+    // alert('Некоторые файлы не являются изображениями. Пожалуйста, выберите только файлы изображений (JPEG, PNG, GIF, WebP)');
     evt.target.value = '';
 
     return;

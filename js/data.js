@@ -44,6 +44,3 @@ export const DEFAULT_COORDS = {
 
 export const MAP_ZOOM = 12;
 
-export const TILE_LAYER_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
-export const TILE_LAYER_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';

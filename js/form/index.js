@@ -23,7 +23,6 @@ const lockAddressInput = () => {
   addressInput.style.cursor = 'not-allowed';
 };
 
-//Здесь синхронизируем время заезда и выезда
 const syncTime = (source, target) => {
   target.value = source.value;
 };
