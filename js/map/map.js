@@ -22,16 +22,19 @@ export const mapModule = (() => {
           controls: ['zoomControl']
         });
 
-        marker = new ymaps.Placemark(
+        const mainPinIcon = new ymaps.Placemark(
           [DEFAULT_COORDS.lat, DEFAULT_COORDS.lng],
           {},
           {
             draggable: true,
-            preset: 'islands#icon',
-            iconColor: '#ff5635'
+            iconLayout: 'default#image',
+            iconImageHref: 'vendor/img/main-pin.svg',
+            iconImageSize: [52, 52],
+            iconImageOffset: [-26, -52]
           }
         );
 
+        marker = mainPinIcon;
         map.geoObjects.add(marker);
         updateAddressField(DEFAULT_COORDS.lat, DEFAULT_COORDS.lng);
 
@@ -56,6 +59,13 @@ export const mapModule = (() => {
         reject(error);
       }
     });
+  });
+
+  const createAdvertisementIcon = () => ({
+    iconLayout: 'default#image',
+    iconImageHref: 'vendor/img/pin.svg',
+    iconImageSize: [40, 40],
+    iconImageOffset: [-20, -40]
   });
 
   function updateAddressField(lat, lng) {
@@ -136,6 +146,8 @@ export const mapModule = (() => {
     }
   };
 
+  const getAdvertisementIcon = () => createAdvertisementIcon();
+
   return {
     initMap,
     getCurrentCoords,
@@ -143,6 +155,7 @@ export const mapModule = (() => {
     togglePageState,
     getMapLoadStatus,
     getMap,
-    resetMap
+    resetMap,
+    getAdvertisementIcon
   };
 })();

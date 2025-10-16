@@ -1,5 +1,5 @@
-import { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayItems, getRandomArrayElement, createRandomIdFromRangeGenerator, lat, lng } from './util.js';
-import { TITLES, DESCRIPTIONS, TYPES, CHECKINS, CHECKOUTS, FEATURES, PHOTOS } from './data.js';
+import { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayItems, getRandomArrayElement, createRandomIdFromRangeGenerator, lat, lng } from '../util.js';
+import { TITLES, DESCRIPTIONS, TYPES, CHECKINS, CHECKOUTS, FEATURES, PHOTOS } from '../data.js';
 
 const AUTHORS_QUANTITY = 10;
 

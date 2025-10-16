@@ -1,9 +1,9 @@
 import { initForm } from './form/index.js';
 import { mapModule } from './map/map.js';
 import { initResetHandler } from './form/reset-form.js';
-import { loadData } from './api.js';
-import { setAdvertisements, renderAdvertisements } from './advertisements.js';
-import { initFilters, disableFilters, resetFilters } from './filters.js';
+import { loadData } from './map/api.js';
+import { setAdvertisements, renderAdvertisements } from './map/advertisements.js';
+import { initFilters, disableFilters, resetFilters } from './map/filters.js';
 
 const initApp = async () => {
   try {
